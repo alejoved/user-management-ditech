@@ -18,7 +18,7 @@ public class UserEntity {
     private UUID id;
     @Column(nullable = false)
     private String userName;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
     private boolean active;

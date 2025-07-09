@@ -23,12 +23,24 @@ public class UserRepository implements IUserRepository{
     @Autowired
     private IUserJpaRepository userRepository;
 
+    /**
+     * Get all users from database
+     *
+     * @return List Users in database.
+     */
     @Override
     public List<User> get() {
         List<UserEntity> users = userRepository.findAll();
         return users.stream().map(UserMapper::toDomain).collect(Collectors.toList());
     }
 
+    /**
+     * Get a user by id
+     *
+     * @param id Unique identifier in UUID
+     * @return User object.
+     * @throws EntityNotExistsException if the user not exists
+     */
     @Override
     public User getById(UUID id) {
         Optional<UserEntity> user = userRepository.findById(id);
@@ -38,6 +50,13 @@ public class UserRepository implements IUserRepository{
         return UserMapper.toDomain(user.get());
     }
 
+    /**
+     * Create a user model in database
+     *
+     * @param user model
+     * @return Create object user.
+     * @throws EntityExistsException if the user exists
+     */
     @Override
     public User create(User user) {
         UserEntity userEntity = UserMapper.toEntity(user);
@@ -45,6 +64,11 @@ public class UserRepository implements IUserRepository{
         return UserMapper.toDomain(response);
     }
 
+    /**
+     * Delete a user in database
+     *
+     * @param id Unique identifier in UUID
+     */
     @Override
     public void delete(UUID id) {
         userRepository.deleteById(id);

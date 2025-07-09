@@ -17,6 +17,13 @@ public class UserDeleteUseCase implements IUserDeleteUseCase {
     @Autowired
     private IUserRepository userRepository;
 
+    /**
+     * Delete a user
+     *
+     * @param id Unique identifier in UUID
+     * @return User create object.
+     * @throws EntityNotExistsException if the user not exists
+     */
     @Override
     public void execute(UUID id) {
         User user = userRepository.getById(id);
