@@ -1,60 +1,42 @@
 
-# 🩺 API de Reservas de Citas Médicas — *DoctorYa*
+# User Management API
 
-[![Build](https://github.com/alejoved/DoctorYa-Java-SpringBoot/actions/workflows/ci.yml/badge.svg)](https://github.com/alejoved/DoctorYa-Java-SpringBoot/actions)
-[![License](https://img.shields.io/github/license/alejoved/DoctorYa-Java-SpringBoot)](LICENSE)
-[![Last Commit](https://img.shields.io/github/last-commit/alejoved/DoctorYa-Java-SpringBoot)](https://github.com/alejoved/DoctorYa-Java-SpringBoot/commits)
+[![Build](https://github.com/alejoved/user-management-ditech/actions/workflows/ci.yml/badge.svg)](https://github.com/alejoved/user-management-ditech/actions)
+[![License](https://img.shields.io/github/license/alejoved/user-management-ditech)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/alejoved/user-management-ditech)](https://github.com/alejoved/user-management-ditech/commits)
 [![Java](https://img.shields.io/badge/java-17-blue.svg)](https://openjdk.org/projects/jdk/17/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.0+-brightgreen)](https://spring.io/projects/spring-boot)
 [![Dockerized](https://img.shields.io/badge/docker-ready-blue)](#docker)
 
 ---
 
-Sistema backend para la gestión de citas médicas entre pacientes y doctores. Este proyecto ha sido desarrollado como una muestra de habilidades de un **desarrollador backend senior**, incorporando buenas prácticas de arquitectura, reglas de negocio robustas, pruebas automatizadas y despliegue en contenedores.
-
----
-
-## 🚀 Funcionalidades Principales
-
-### 👨‍⚕️ Doctores
-- CRUD completo (`id`, `name`, `specialty`)
+## 🚀 Main functionalities
   
-### 🧑 Pacientes
-- CRUD completo (`id`, `name`, `email`)
-  
-### 📆 Citas Médicas
-- Crear, listar y cancelar citas
-- Atributos: `id`, `doctorId`, `patientId`, `startTime`, `endTime`, `notes`
-
+### 🧑 User
+- (`id`, `userName`, `email`, `active`)
+- Read users
+- Get user by Id
+- Create users
+- Delete user
 ---
 
-## 📋 Reglas de Negocio
+## ⚙️ Technology Stack
 
-- ❌ No se permite el **solapamiento de citas** para un mismo doctor
-- ❌ Un paciente no puede tener **dos citas al mismo tiempo**
-- ✅ `startTime` debe ser **anterior a** `endTime`
-- ✅ Posibilidad de consultar la **disponibilidad de un doctor**
-- ⚠️ Validaciones personalizadas con manejo de excepciones controlado
-
----
-
-## ⚙️ Tecnologías Utilizadas
-
-| Categoría         | Tecnología                        |
+| Category         | Technology                        |
 |------------------|-----------------------------------|
-| Lenguaje          | Java                              |
+| Language          | Java                              |
 | Framework         | Spring Boot                       |
-| ORM               | JPA + JPQL                        |
-| Base de datos     | PostgreSQL                        |
-| Documentación API | Swagger                           |
+| ORM               | JPA                               |
+| Base de datos     | H2                                |
+| API Documentation | Swagger                           |
 | Testing           | JUnit                             |
-| Contenedores      | Docker, Podman, Minikube (K8s)    |
+| Containers        | Docker, Minikube (K8s)            |
 
 ---
 
-## 🗂️ Arquitectura del Proyecto
+## 🗂️ Project Architecture
 
-> 🧱 Basada en principios de **Arquitectura Hexagonal** / Clean Architecture
+> 🧱 Based on Hexagonal Architecture / Clean Architecture principles
 
 ```
 src/
@@ -63,109 +45,78 @@ src/
 ├── infrastructure/     # Adaptadores secundarios (DB, servicios externos)
 ├── interface/          # Adaptadores primarios (controllers REST)
 ├── shared/             # Utilidades, constantes, middlewares
-└── main.ts             # Punto de entrada principal
+└── main.java           # Punto de entrada principal
 ```
-
-✅ Separación clara de responsabilidades  
-✅ Diseño orientado a dominios  
-✅ Módulos desacoplados y escalables
 
 ---
 
-## 🧪 Ejecución y Pruebas
+## 🧪 Execute and tests
 
-### ▶️ Ejecución Local
+### ▶️ Local Execution
 ```bash
-# Instalar dependencias
+# Install dependencies
 ./mvnw install
 
-# Ejecutar el proyecto
+# Execute project
 ./mvnw spring-boot:run
 ```
 
-### 🧪 Ejecutar Tests
+### 🧪 Tests Execution
 ```bash
 ./mvnw test
 ./mvnw clean test jacoco:report
 ```
 
-### 📘 Documentación Swagger
-Disponible automáticamente en:  
+### 📘 Swagger Documentation
 `http://localhost:8080/swagger-ui.html`
 
 ---
 
-## 📦 Docker / Contenedores
+## 📦 Docker / Containers
 
-### 🐳 Build & Run con Podman
+### 🐳 Build & Run with Podman
 ```bash
-podman build -t doctorya-app:latest .
+podman build -t usermanagement-app:latest .
 podman compose up
 ```
 
 ---
 
-## ☸️ Despliegue en Kubernetes con Minikube
+## ☸️ Deploy in Kubernetes with Minikube
 
 ### ✅ Requisitos
-- [x] Minikube instalado
+- [x] Install Minikube
 - [x] Podman (o Docker)
-- [x] Manifiestos en `k8s/`
+- [x] Manifests `k8s/`
 
-### 🚀 Pasos de Despliegue
+### 🚀 Deploy steps
 ```bash
 minikube delete
 minikube start
 minikube addons enable metrics-server
 
-# Crear y exportar imagen
-podman build -t doctorya-app:latest .
-podman save -o doctorya-app.tar doctorya-app:latest
+# Create and export image
+podman build -t usermanagement-app:latest .
+podman save -o usermanagement-app.tar usermanagement-app:latest
 
-# Cargar imagen en Minikube
-minikube image load doctorya-app.tar
+# Load Image in Minikube
+minikube image load usermanagement-app.tar
 
-# Aplicar manifiestos K8s
+# Apply k8s manifests
 kubectl apply -f k8s/
 
-# Ver logs o exponer servicio
+# Show logs and service
 kubectl logs <pod-name>
-minikube service doctorya-service
+minikube service usermanagement-service
 ```
-
----
-
-## 🧠 Buenas Prácticas Aplicadas
-
-1. **Separación modular clara** (`Appointment`, `Auth`, `Patient`, `Physician`)
-2. **Subcarpetas por responsabilidad**: `Controller`, `DTO`, `Entity`, `Service`, `Repository`
-3. **Centralización de lógica común**: `utils/`, `exceptions/`
-4. **Validaciones robustas**: Uso de excepciones personalizadas
-5. **Documentación y demo accesible**: Swagger + comandos en README
-6. **Preparado para producción**: Docker, K8s, configuración desacoplada
-
----
-
-## 📌 Qué Demuestra Este Proyecto
-
-| Habilidad                           | Evidencia                                                 |
-|------------------------------------|------------------------------------------------------------|
-| Diseño de dominios                 | Entidades ricas + reglas de negocio aplicadas             |
-| Arquitectura escalable             | Hexagonal, modular, separación de capas                   |
-| Testing profesional                | JUnit, validaciones y casos límite cubiertos              |
-| Seguridad                          | JWT, control de roles (si aplica en tu repo)              |
-| DevOps básico                      | Docker, Podman, Minikube                                  |
-| Documentación y mantenimiento      | Código limpio + README claro + Swagger                    |
-
----
 
 ## 👤 Autor
 
-Desarrollado por **Alejandro Aguirre**  
+Developer by **Alejandro Aguirre**  
 [LinkedIn](https://www.linkedin.com/in/jorge-alejandro-aguirre-gutierrez-1836a0187) • [GitHub](https://github.com/alejoved) • Backend Engineer
 
 ---
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está licenciado bajo la [MIT License](LICENSE).
+This project with license [MIT License](LICENSE).

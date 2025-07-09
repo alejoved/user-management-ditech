@@ -69,7 +69,7 @@ public class UserController {
         return ResponseEntity.ok(userResponseDto);
     }
 
-    @Operation(summary = "Create a new User")
+    @Operation(summary = "Create a new user")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "User created successfully"),
         @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
